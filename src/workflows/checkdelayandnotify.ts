@@ -1,0 +1,121 @@
+import { proxyActivities } from '@temporalio/workflow';
+
+import { RouteInfoDto } from '../dto/routeinfo';
+import { ClientInfoDto } from '../dto/clientinfo';
+import { NotificationSettingsDto } from '../dto/settings';
+
+import type * as activities from '../activities/index';
+
+const { estimateDurationInTraffic, generateEmailText, generateSmsText, makeEmailTextFromTemplate, makeSmsTextFromTemplate, sendEmail, sendSms } = proxyActivities<typeof activities>({
+  startToCloseTimeout: '1 minute',
+});
+
+export type CheckDelayAndNotifyRequestDto = {
+  orderId?: string;
+  routeInfo: RouteInfoDto;
+  promisedDurationSeconds: number;
+  notificationThresholdSeconds: number;
+  clientInfo: ClientInfoDto;
+  clientNotificationSettings: NotificationSettingsDto;
+};
+
+export type CheckDelayAndNotifyResponseDto = {
+  success: boolean;
+  estimatedDuration?: number;
+  smsSent: number;
+  emailsSent: number;
+  errors: string[];
+};
+
+export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto): Promise<CheckDelayAndNotifyResponseDto> {
+
+  const response: CheckDelayAndNotifyResponseDto = {
+    success: false,
+    smsSent: 0,
+    emailsSent: 0,
+    errors: []
+  };
+
+  //
+  // 1. Get estimated duration in traffic (if possible)
+  //
+  let estimatedDuration: number | undefined;
+  let durationDelta: number;
+  try {
+    estimatedDuration = await estimateDurationInTraffic(request.routeInfo);
+    response.estimatedDuration = estimatedDuration;
+    durationDelta = request.promisedDurationSeconds - estimatedDuration;
+  } catch (error) {
+    response.errors.push((error as Error).message);
+    // We are already out of time, but we don't know how much
+    // It might be more convenient to have different threshold for this case
+    if (request.promisedDurationSeconds < 0) {
+      durationDelta = request.promisedDurationSeconds;
+    }
+    // We are currenly on time, but don't have reliable estimations
+    else {
+      return response;
+    }
+  }
+
+  //
+  // 2. Check if we need to notify the client
+  //
+  if (Math.abs(durationDelta) > request.notificationThresholdSeconds) {
+    response.success = true;
+    return response;
+  }
+
+  //
+  // 3. Generate and send SMS
+  //
+  if (request.clientNotificationSettings.smsEnabled) {
+
+    // 3.1 Generate sms text
+    let smsText;
+    try {
+      smsText = await generateSmsText();
+    } catch (error) {
+      response.errors.push((error as Error).message);
+      smsText = await makeSmsTextFromTemplate();
+    }
+
+    // 3.2 Send an sms
+    try {
+      await sendSms(smsText);
+      response.smsSent++;
+    } catch (error) {
+      response.errors.push((error as Error).message);
+    }
+  }
+
+  //
+  // 4. Generate and send email
+  //
+  if (request.clientNotificationSettings.emailEnabled) {
+
+    // 4.1 Generate email text
+    let emailText;
+    try {
+      emailText = await generateEmailText();
+    } catch (error) {
+      response.errors.push((error as Error).message);
+      emailText = await makeEmailTextFromTemplate();
+    }
+
+    // 4.2 Send an email
+    try {
+      await sendEmail(emailText);
+      response.emailsSent++;
+    } catch (error) {
+      response.errors.push((error as Error).message);
+    }
+  }
+
+  //
+  // 5. Successfully conclude the workflow
+  //
+  response.success = true;
+  return response;
+}
+

@@ -1,5 +1,5 @@
-import { RouteInfoDto } from "../dto/routeinfo";
-import { callComputeRoutes } from "../services/googleroutes";
+import { RouteInfoDto } from '../dto/routeinfo';
+import { callComputeRoutes } from '../services/googleroutes';
 
 export async function estimateDurationInTraffic(routeInfo: RouteInfoDto): Promise<number> {
   const duration: number | undefined = await callComputeRoutes(routeInfo.originAddress, routeInfo.destinationAddress);

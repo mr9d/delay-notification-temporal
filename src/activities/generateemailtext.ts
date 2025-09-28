@@ -1,6 +1,6 @@
-import { ClientInfoDto } from "../dto/clientinfo";
-import { RouteInfoDto } from "../dto/routeinfo";
-import { generateMessage } from "../services/openai";
+import { ClientInfoDto } from '../dto/clientinfo';
+import { RouteInfoDto } from '../dto/routeinfo';
+import { generateMessage } from '../services/openai';
 
 export async function generateEmailText(
   orderId: string,
@@ -20,4 +20,4 @@ export async function generateEmailText(
   The message should be concise and reassuring, emphasizing our commitment to timely delivery and customer satisfaction.
   The message should be suitable for an email format.
   Do not include anything else apart from the message itself.`);
-};
+}

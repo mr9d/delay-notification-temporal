@@ -4,4 +4,4 @@ export type ClientInfoDto = {
   secondName: string;
   phoneNumber?: string;
   email?: string;
-}
+};

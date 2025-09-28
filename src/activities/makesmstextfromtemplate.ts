@@ -1,4 +1,4 @@
-import { ClientInfoDto } from "../dto/clientinfo";
+import { ClientInfoDto } from '../dto/clientinfo';
 
 export async function makeSmsTextFromTemplate(
   orderId: string,

@@ -15,20 +15,22 @@ async function run() {
 
   const handle = await client.workflow.start(checkDelayAndNotify, {
     taskQueue: TEMPORAL_TASK_QUEUE,
-    args: [{
-      orderId: 'order01',
-      routeInfo: { originAddress: '1 Main St, Springfield, IL', destinationAddress: '456 Elm St, Shelbyville, IL' },
-      promisedDurationSeconds: 1000,
-      notificationThresholdSeconds: 300,
-      clientInfo: {
-        id: 'client01',
-        firstName: 'Mike',
-        secondName: 'Cold',
-        email: 'mikecold@gmail.com',
-        phoneNumber: '+15005550006'
+    args: [
+      {
+        orderId: 'order01',
+        routeInfo: { originAddress: '1 Main St, Springfield, IL', destinationAddress: '456 Elm St, Shelbyville, IL' },
+        promisedDurationSeconds: 1000,
+        notificationThresholdSeconds: 300,
+        clientInfo: {
+          id: 'client01',
+          firstName: 'Mike',
+          secondName: 'Cold',
+          email: 'mikecold@gmail.com',
+          phoneNumber: '+15005550006',
+        },
+        clientNotificationSettings: { emailEnabled: true, smsEnabled: true },
       },
-      clientNotificationSettings: { emailEnabled: true, smsEnabled: true }
-    }],
+    ],
     workflowId: 'workflow-' + nanoid(),
   });
   console.log(`Started workflow ${handle.workflowId}`);

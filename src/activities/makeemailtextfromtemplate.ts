@@ -1,5 +1,5 @@
-import { ClientInfoDto } from "../dto/clientinfo";
-import { RouteInfoDto } from "../dto/routeinfo";
+import { ClientInfoDto } from '../dto/clientinfo';
+import { RouteInfoDto } from '../dto/routeinfo';
 
 export async function makeEmailTextFromTemplate(
   orderId: string,

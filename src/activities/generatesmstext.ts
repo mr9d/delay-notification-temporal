@@ -1,5 +1,5 @@
-import { ClientInfoDto } from "../dto/clientinfo";
-import { generateMessage } from "../services/openai";
+import { ClientInfoDto } from '../dto/clientinfo';
+import { generateMessage } from '../services/openai';
 
 export async function generateSmsText(
   orderId: string,

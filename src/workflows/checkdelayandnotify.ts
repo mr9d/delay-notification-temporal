@@ -6,7 +6,15 @@ import { NotificationSettingsDto } from '../dto/settings';
 
 import type * as activities from '../activities/index';
 
-const { estimateDurationInTraffic, generateEmailText, generateSmsText, makeEmailTextFromTemplate, makeSmsTextFromTemplate, sendEmail, sendSms } = proxyActivities<typeof activities>({
+const {
+  estimateDurationInTraffic,
+  generateEmailText,
+  generateSmsText,
+  makeEmailTextFromTemplate,
+  makeSmsTextFromTemplate,
+  sendEmail,
+  sendSms,
+} = proxyActivities<typeof activities>({
   startToCloseTimeout: '1 minute',
 });
 
@@ -27,13 +35,14 @@ export type CheckDelayAndNotifyResponseDto = {
   errors: string[];
 };
 
-export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto): Promise<CheckDelayAndNotifyResponseDto> {
-
+export async function checkDelayAndNotify(
+  request: CheckDelayAndNotifyRequestDto,
+): Promise<CheckDelayAndNotifyResponseDto> {
   const response: CheckDelayAndNotifyResponseDto = {
     success: false,
     smsSent: 0,
     emailsSent: 0,
-    errors: []
+    errors: [],
   };
 
   //
@@ -70,7 +79,6 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
   // 3. Generate and send SMS
   //
   if (request.clientNotificationSettings.smsEnabled && request.clientInfo.phoneNumber) {
-
     // 3.1 Generate sms text
     let smsText;
     try {
@@ -93,14 +101,18 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
   // 4. Generate and send email
   //
   if (request.clientNotificationSettings.emailEnabled && request.clientInfo.email) {
-
     // 4.1 Generate email text
     let emailText;
     try {
       emailText = await generateEmailText(request.orderId, request.routeInfo, durationDelta, request.clientInfo);
     } catch (error) {
       response.errors.push((error as Error).message);
-      emailText = await makeEmailTextFromTemplate(request.orderId, request.routeInfo, durationDelta, request.clientInfo);
+      emailText = await makeEmailTextFromTemplate(
+        request.orderId,
+        request.routeInfo,
+        durationDelta,
+        request.clientInfo,
+      );
     }
 
     // 4.2 Send an email
@@ -118,4 +130,3 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
   response.success = true;
   return response;
 }
-

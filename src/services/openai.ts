@@ -1,13 +1,13 @@
-import OpenAI from "openai";
+import OpenAI from 'openai';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 
 export async function generateMessage(prompt: string): Promise<string> {
   const response = await openai.responses.create({
-    model: "gpt-4o-mini",
+    model: 'gpt-4o-mini',
     input: [
       {
-        role: "user",
+        role: 'user',
         content: prompt,
       },
     ],
@@ -17,7 +17,7 @@ export async function generateMessage(prompt: string): Promise<string> {
   const text = response?.output_text;
 
   if (!text) {
-    throw new Error("No text returned from OpenAI");
+    throw new Error('No text returned from OpenAI');
   }
 
   return text;

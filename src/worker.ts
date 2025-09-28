@@ -5,7 +5,6 @@ import * as activities from './activities/index';
 import { TEMPORAL_HOST, TEMPORAL_NAMESPACE, TEMPORAL_PORT, TEMPORAL_TASK_QUEUE } from './shared/const';
 
 async function run() {
-
   const connection = await NativeConnection.connect({
     address: `${TEMPORAL_HOST}:${TEMPORAL_PORT}`,
     // TLS and gRPC metadata configuration goes here.

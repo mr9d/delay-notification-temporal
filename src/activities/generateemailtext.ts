@@ -2,12 +2,23 @@ import { ClientInfoDto } from '../dto/clientinfo';
 import { RouteInfoDto } from '../dto/routeinfo';
 import { generateMessage } from '../services/openai';
 
+/**
+ * Generates a customer-facing email message about a delivery delay or early arrival.
+ *
+ * @param orderId - The unique identifier for the order
+ * @param routeInfo - RouteInfoDto containing origin and destination addresses
+ * @param expectedDelaySeconds - The number of seconds the delivery is delayed (negative) or early (positive)
+ * @param clientInfo - ClientInfoDto containing customer name and contact info
+ * @returns A friendly, concise email message string for the customer
+ */
 export async function generateEmailText(
   orderId: string,
   routeInfo: RouteInfoDto,
   expectedDelaySeconds: number,
   clientInfo: ClientInfoDto,
 ): Promise<string> {
+  // Compose a prompt for the AI message generator, including all relevant delivery and customer details.
+  // The prompt adapts based on whether the delivery is delayed or early.
   return await generateMessage(`Generate a friendly message for the customer about the ${expectedDelaySeconds < 0 ? 'delay' : 'earlier arrival'} of their delivery.
   The message should include the following details:
   - Customer's name: ${clientInfo.firstName} ${clientInfo.secondName}

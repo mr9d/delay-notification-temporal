@@ -2,15 +2,19 @@ import 'dotenv/config';
 
 import { NativeConnection, Worker } from '@temporalio/worker';
 import * as activities from './activities/index';
-import { TEMPORAL_HOST, TEMPORAL_NAMESPACE, TEMPORAL_PORT, TEMPORAL_TASK_QUEUE } from './shared/const';
 
 /**
  * Main entry point for the Temporal worker. Connects to the Temporal server, registers workflows and activities, and starts polling for tasks.
  */
 async function run() {
+  // Validate that all required environment variables are set.
+  if (!process.env.TEMPORAL_HOST || !process.env.TEMPORAL_PORT || !process.env.TEMPORAL_NAMESPACE || !process.env.TEMPORAL_TASK_QUEUE) {
+    throw new Error('One or more Temporal environment variables are not set (TEMPORAL_HOST, TEMPORAL_PORT, TEMPORAL_NAMESPACE, TEMPORAL_TASK_QUEUE)');
+  }
+
   // Establish a connection to the Temporal server using host and port from environment/config.
   const connection = await NativeConnection.connect({
-    address: `${TEMPORAL_HOST}:${TEMPORAL_PORT}`,
+    address: `${process.env.TEMPORAL_HOST}:${process.env.TEMPORAL_PORT}`,
     // TLS and gRPC metadata configuration goes here.
   });
 
@@ -23,8 +27,8 @@ async function run() {
     // - activities: Object containing all activity implementations
     const worker = await Worker.create({
       connection,
-      namespace: TEMPORAL_NAMESPACE,
-      taskQueue: TEMPORAL_TASK_QUEUE,
+      namespace: process.env.TEMPORAL_NAMESPACE,
+      taskQueue: process.env.TEMPORAL_TASK_QUEUE,
       workflowsPath: require.resolve('./workflows/index'),
       activities,
     });

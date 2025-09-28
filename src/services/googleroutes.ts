@@ -15,6 +15,11 @@ export async function callComputeRoutes(
   originAddress: string,
   destinationAddress: string,
 ): Promise<number | undefined> {
+  // Ensure the API key is set in environment variables.
+  if (!process.env.GOOGLE_MAPS_API_KEY) {
+    throw new Error('GOOGLE_MAPS_API_KEY is not set in environment variables');
+  }
+
   // Construct the request object for the API call.
   // travelMode: 1 corresponds to 'DRIVE' (car travel mode).
   const request = {

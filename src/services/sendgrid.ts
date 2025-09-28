@@ -14,6 +14,11 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
  * @returns True if the email was sent successfully
  */
 export async function send(email: string, subject: string, text: string): Promise<boolean> {
+  // Ensure the API key is set in environment variables.
+  if (!process.env.SENDGRID_API_KEY) {
+    throw new Error('SENDGRID_API_KEY is not set in environment variables');
+  }
+
   // Construct the email message object with all required fields.
   const msg = {
     to: email,

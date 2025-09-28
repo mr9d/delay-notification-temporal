@@ -12,6 +12,11 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
  * @throws Error if no text is returned from OpenAI
  */
 export async function generateMessage(prompt: string): Promise<string> {
+  // Ensure the API key is set in environment variables.
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY is not set in environment variables');
+  }
+
   // Call the OpenAI API with the specified model and user prompt.
   const response = await openai.responses.create({
     model: 'gpt-4o-mini',

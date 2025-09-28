@@ -3,25 +3,29 @@ import 'dotenv/config';
 import { Connection, Client } from '@temporalio/client';
 import { checkDelayAndNotify } from './workflows/checkdelayandnotify';
 import { nanoid } from 'nanoid';
-import { TEMPORAL_HOST, TEMPORAL_NAMESPACE, TEMPORAL_PORT, TEMPORAL_TASK_QUEUE } from './shared/const';
 
 /**
  * Main entry point for the Temporal client. Connects to the Temporal server and starts the workflow.
  */
 async function run() {
+  // Validate that all required environment variables are set.
+  if (!process.env.TEMPORAL_HOST || !process.env.TEMPORAL_PORT || !process.env.TEMPORAL_NAMESPACE || !process.env.TEMPORAL_TASK_QUEUE) {
+    throw new Error('One or more Temporal environment variables are not set (TEMPORAL_HOST, TEMPORAL_PORT, TEMPORAL_NAMESPACE, TEMPORAL_TASK_QUEUE)');
+  }
+
   // Establish a connection to the Temporal server using host and port from environment/config.
-  const connection = await Connection.connect({ address: `${TEMPORAL_HOST}:${TEMPORAL_PORT}` });
+  const connection = await Connection.connect({ address: `${process.env.TEMPORAL_HOST}:${process.env.TEMPORAL_PORT}` });
 
   // Create a Temporal client for the specified namespace.
   const client = new Client({
     connection,
-    namespace: TEMPORAL_NAMESPACE,
+    namespace: process.env.TEMPORAL_NAMESPACE,
   });
 
   // Start the checkDelayAndNotify workflow with test data.
   // The workflow is started on the specified task queue, with a unique workflowId and all required arguments.
   const handle = await client.workflow.start(checkDelayAndNotify, {
-    taskQueue: TEMPORAL_TASK_QUEUE,
+    taskQueue: process.env.TEMPORAL_TASK_QUEUE!,
     args: [
       {
         orderId: 'order01',

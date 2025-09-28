@@ -13,7 +13,7 @@ export async function sendSms(phoneNumber: string, text: string): Promise<boolea
 
   // The sender number is configurable via environment variable.
   const fromNumber = process.env.TWILIO_FROM_NUMBER || '+15005550006';
-  
+
   // Use the send function from the Twilio service to send the SMS.
   return await send(phoneNumber, fromNumber, text);
 }

@@ -20,13 +20,13 @@ const MOCK_CLIENT: ClientInfoDto = {
 
 const MOCK_ROUTE: RouteInfoDto = {
   originAddress: '1 Main St, Springfield, IL',
-  destinationAddress: '456 Elm St, Shelbyville, IL'
-}
+  destinationAddress: '456 Elm St, Shelbyville, IL',
+};
 
 const MOCK_NOTIFICATION_SETTINGS: NotificationSettingsDto = {
   emailEnabled: true,
-  smsEnabled: true
-}
+  smsEnabled: true,
+};
 
 const MOCK_THRESHOLD_SECONDS = 300;
 
@@ -35,8 +35,15 @@ const MOCK_THRESHOLD_SECONDS = 300;
  */
 async function run() {
   // Validate that all required environment variables are set.
-  if (!process.env.TEMPORAL_HOST || !process.env.TEMPORAL_PORT || !process.env.TEMPORAL_NAMESPACE || !process.env.TEMPORAL_TASK_QUEUE) {
-    throw new Error('One or more Temporal environment variables are not set (TEMPORAL_HOST, TEMPORAL_PORT, TEMPORAL_NAMESPACE, TEMPORAL_TASK_QUEUE)');
+  if (
+    !process.env.TEMPORAL_HOST ||
+    !process.env.TEMPORAL_PORT ||
+    !process.env.TEMPORAL_NAMESPACE ||
+    !process.env.TEMPORAL_TASK_QUEUE
+  ) {
+    throw new Error(
+      'One or more Temporal environment variables are not set (TEMPORAL_HOST, TEMPORAL_PORT, TEMPORAL_NAMESPACE, TEMPORAL_TASK_QUEUE)',
+    );
   }
 
   // Establish a connection to the Temporal server using host and port from environment/config.

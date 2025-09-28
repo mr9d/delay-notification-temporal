@@ -8,8 +8,15 @@ import * as activities from './activities/index';
  */
 async function run() {
   // Validate that all required environment variables are set.
-  if (!process.env.TEMPORAL_HOST || !process.env.TEMPORAL_PORT || !process.env.TEMPORAL_NAMESPACE || !process.env.TEMPORAL_TASK_QUEUE) {
-    throw new Error('One or more Temporal environment variables are not set (TEMPORAL_HOST, TEMPORAL_PORT, TEMPORAL_NAMESPACE, TEMPORAL_TASK_QUEUE)');
+  if (
+    !process.env.TEMPORAL_HOST ||
+    !process.env.TEMPORAL_PORT ||
+    !process.env.TEMPORAL_NAMESPACE ||
+    !process.env.TEMPORAL_TASK_QUEUE
+  ) {
+    throw new Error(
+      'One or more Temporal environment variables are not set (TEMPORAL_HOST, TEMPORAL_PORT, TEMPORAL_NAMESPACE, TEMPORAL_TASK_QUEUE)',
+    );
   }
 
   // Establish a connection to the Temporal server using host and port from environment/config.

@@ -24,6 +24,6 @@ export async function send(toNumber: string, fromNumber: string, body: string): 
     body,
   });
 
-  //console.log("Message SID:", message.sid);
+  console.log('Message SID:', message.sid);
   return true;
 }

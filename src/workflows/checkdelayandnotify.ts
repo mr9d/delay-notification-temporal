@@ -22,21 +22,21 @@ const {
 
 // Input DTO for the workflow, containing all necessary information for delay checking and notification
 export type CheckDelayAndNotifyRequestDto = {
-  orderId: string;                                      // Unique order identifier
-  routeInfo: RouteInfoDto;                              // Route details for the delivery
-  promisedDurationSeconds: number;                      // Promised delivery duration in seconds
-  notificationThresholdSeconds: number;                 // Threshold for when to notify the client
-  clientInfo: ClientInfoDto;                            // Client contact information
-  clientNotificationSettings: NotificationSettingsDto;  // Client's notification preferences
+  orderId: string; // Unique order identifier
+  routeInfo: RouteInfoDto; // Route details for the delivery
+  promisedDurationSeconds: number; // Promised delivery duration in seconds
+  notificationThresholdSeconds: number; // Threshold for when to notify the client
+  clientInfo: ClientInfoDto; // Client contact information
+  clientNotificationSettings: NotificationSettingsDto; // Client's notification preferences
 };
 
 // Output DTO for the workflow, summarizing the result and any errors
 export type CheckDelayAndNotifyResponseDto = {
-  success: boolean;           // Whether the operation completed successfully
+  success: boolean; // Whether the operation completed successfully
   estimatedDuration?: number; // Estimated duration in seconds
-  smsSent: number;            // Number of SMS sent
-  emailsSent: number;         // Number of emails sent
-  errors: string[];           // Any errors encountered
+  smsSent: number; // Number of SMS sent
+  emailsSent: number; // Number of emails sent
+  errors: string[]; // Any errors encountered
 };
 
 /**
@@ -48,7 +48,6 @@ export type CheckDelayAndNotifyResponseDto = {
 export async function checkDelayAndNotify(
   request: CheckDelayAndNotifyRequestDto,
 ): Promise<CheckDelayAndNotifyResponseDto> {
-
   // Initialize the response object to track results and errors
   const response: CheckDelayAndNotifyResponseDto = {
     success: false,

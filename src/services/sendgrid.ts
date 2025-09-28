@@ -3,7 +3,6 @@ import sgMail from '@sendgrid/mail';
 // Set the SendGrid API key from environment variables for authentication.
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
-
 /**
  * Sends an email using the SendGrid service.
  *

@@ -18,7 +18,9 @@ export async function estimateDurationInTraffic(routeInfo: RouteInfoDto): Promis
   }
 
   // Log the estimated duration
-  console.log(`Estimated duration in traffic for route ${routeInfo.originAddress} - ${routeInfo.destinationAddress} is: ${duration} seconds`);
+  console.log(
+    `Estimated duration in traffic for route ${routeInfo.originAddress} - ${routeInfo.destinationAddress} is: ${duration} seconds`,
+  );
 
   // Return the estimated duration in seconds
   return duration;

@@ -25,7 +25,7 @@ export async function callComputeRoutes(
   const request = {
     origin: { address: originAddress },
     destination: { address: destinationAddress },
-    travelMode: 1
+    travelMode: 1,
   };
 
   // Call the API with a FieldMask header to request only the 'duration' field in the response.

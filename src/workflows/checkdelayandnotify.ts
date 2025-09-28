@@ -78,51 +78,58 @@ export async function checkDelayAndNotify(
   //
   // 3. Generate and send SMS
   //
-  if (request.clientNotificationSettings.smsEnabled && request.clientInfo.phoneNumber) {
-    // 3.1 Generate sms text
-    let smsText;
-    try {
-      smsText = await generateSmsText(request.orderId, durationDelta, request.clientInfo);
-    } catch (error) {
-      response.errors.push((error as Error).message);
-      smsText = await makeSmsTextFromTemplate(request.orderId, durationDelta, request.clientInfo);
-    }
+  const generateAndSendSms = async () => {
+    if (request.clientNotificationSettings.smsEnabled && request.clientInfo.phoneNumber) {
+      // 3.1 Generate sms text
+      let smsText;
+      try {
+        smsText = await generateSmsText(request.orderId, durationDelta, request.clientInfo);
+      } catch (error) {
+        response.errors.push((error as Error).message);
+        smsText = await makeSmsTextFromTemplate(request.orderId, durationDelta, request.clientInfo);
+      }
 
-    // 3.2 Send an sms
-    try {
-      await sendSms(request.clientInfo.phoneNumber, smsText);
-      response.smsSent++;
-    } catch (error) {
-      response.errors.push((error as Error).message);
+      // 3.2 Send an sms
+      try {
+        await sendSms(request.clientInfo.phoneNumber, smsText);
+        response.smsSent++;
+      } catch (error) {
+        response.errors.push((error as Error).message);
+      }
     }
-  }
+  };
 
   //
   // 4. Generate and send email
   //
-  if (request.clientNotificationSettings.emailEnabled && request.clientInfo.email) {
-    // 4.1 Generate email text
-    let emailText;
-    try {
-      emailText = await generateEmailText(request.orderId, request.routeInfo, durationDelta, request.clientInfo);
-    } catch (error) {
-      response.errors.push((error as Error).message);
-      emailText = await makeEmailTextFromTemplate(
-        request.orderId,
-        request.routeInfo,
-        durationDelta,
-        request.clientInfo,
-      );
-    }
+  const generateAndSendEmail = async () => {
+    if (request.clientNotificationSettings.emailEnabled && request.clientInfo.email) {
+      // 4.1 Generate email text
+      let emailText;
+      try {
+        emailText = await generateEmailText(request.orderId, request.routeInfo, durationDelta, request.clientInfo);
+      } catch (error) {
+        response.errors.push((error as Error).message);
+        emailText = await makeEmailTextFromTemplate(
+          request.orderId,
+          request.routeInfo,
+          durationDelta,
+          request.clientInfo,
+        );
+      }
 
-    // 4.2 Send an email
-    try {
-      await sendEmail(request.clientInfo.email, emailText);
-      response.emailsSent++;
-    } catch (error) {
-      response.errors.push((error as Error).message);
+      // 4.2 Send an email
+      try {
+        await sendEmail(request.clientInfo.email, emailText);
+        response.emailsSent++;
+      } catch (error) {
+        response.errors.push((error as Error).message);
+      }
     }
-  }
+  };
+
+  // Execute notification activities (3 and 4) in parallel
+  await Promise.all([generateAndSendSms(), generateAndSendEmail()]);
 
   //
   // 5. Successfully conclude the workflow

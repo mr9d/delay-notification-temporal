@@ -1,4 +1,6 @@
-export async function sendEmail(text: string): Promise<boolean> {
-  console.log('Sending email with text:', text);
+import { send } from "../services/sendgrid";
+
+export async function sendEmail(email: string, text: string): Promise<boolean> {
+  await send(email, "Delivery Update", text);
   return true;
 };

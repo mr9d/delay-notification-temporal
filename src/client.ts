@@ -20,7 +20,13 @@ async function run() {
       routeInfo: { originAddress: '1 Main St, Springfield, IL', destinationAddress: '456 Elm St, Shelbyville, IL' },
       promisedDurationSeconds: 1000,
       notificationThresholdSeconds: 300,
-      clientInfo: { id: 'client01', firstName: 'Mike', secondName: 'Cold' },
+      clientInfo: {
+        id: 'client01',
+        firstName: 'Mike',
+        secondName: 'Cold',
+        email: 'mikecold@gmail.com',
+        phoneNumber: '+1234567890'
+      },
       clientNotificationSettings: { emailEnabled: true, smsEnabled: true }
     }],
     workflowId: 'workflow-' + nanoid(),

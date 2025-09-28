@@ -69,7 +69,7 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
   //
   // 3. Generate and send SMS
   //
-  if (request.clientNotificationSettings.smsEnabled) {
+  if (request.clientNotificationSettings.smsEnabled && request.clientInfo.phoneNumber) {
 
     // 3.1 Generate sms text
     let smsText;
@@ -92,7 +92,7 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
   //
   // 4. Generate and send email
   //
-  if (request.clientNotificationSettings.emailEnabled) {
+  if (request.clientNotificationSettings.emailEnabled && request.clientInfo.email) {
 
     // 4.1 Generate email text
     let emailText;
@@ -105,7 +105,7 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
 
     // 4.2 Send an email
     try {
-      await sendEmail(emailText);
+      await sendEmail(request.clientInfo.email, emailText);
       response.emailsSent++;
     } catch (error) {
       response.errors.push((error as Error).message);

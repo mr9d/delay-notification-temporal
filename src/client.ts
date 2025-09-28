@@ -18,7 +18,7 @@ async function run() {
     args: [{
       orderId: 'order01',
       routeInfo: { originAddress: '1 Main St, Springfield, IL', destinationAddress: '456 Elm St, Shelbyville, IL' },
-      promisedDurationSeconds: 2000,
+      promisedDurationSeconds: 1000,
       notificationThresholdSeconds: 300,
       clientInfo: { id: 'client01', firstName: 'Mike', secondName: 'Cold' },
       clientNotificationSettings: { emailEnabled: true, smsEnabled: true }

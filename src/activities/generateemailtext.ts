@@ -8,11 +8,11 @@ export async function generateEmailText(
   expectedDelaySeconds: number,
   clientInfo: ClientInfoDto,
 ): Promise<string> {
-  return await generateMessage(`Generate a friendly message for the customer about the ${expectedDelaySeconds < 0 ? 'delay' : 'hasten'} of their delivery.
+  return await generateMessage(`Generate a friendly message for the customer about the ${expectedDelaySeconds < 0 ? 'delay' : 'earlier arrival'} of their delivery.
   The message should include the following details:
   - Customer's name: ${clientInfo.firstName} ${clientInfo.secondName}
   - Order ID: ${orderId}
-  - Expected ${expectedDelaySeconds < 0 ? 'delay' : 'hasten'} in minutes: ${Math.round(expectedDelaySeconds / 60)}
+  - Expected ${expectedDelaySeconds < 0 ? 'delay' : 'earlier arrival'} in minutes: ${Math.round(expectedDelaySeconds / 60)}
   - Origin address: ${routeInfo.originAddress}
   - Destination address: ${routeInfo.destinationAddress}
   - Delivery company name: FastExpress

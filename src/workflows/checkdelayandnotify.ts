@@ -77,7 +77,7 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
       smsText = await generateSmsText(request.orderId, durationDelta, request.clientInfo);
     } catch (error) {
       response.errors.push((error as Error).message);
-      smsText = await makeSmsTextFromTemplate();
+      smsText = await makeSmsTextFromTemplate(request.orderId, durationDelta, request.clientInfo);
     }
 
     // 3.2 Send an sms
@@ -100,7 +100,7 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
       emailText = await generateEmailText(request.orderId, request.routeInfo, durationDelta, request.clientInfo);
     } catch (error) {
       response.errors.push((error as Error).message);
-      emailText = await makeEmailTextFromTemplate();
+      emailText = await makeEmailTextFromTemplate(request.orderId, request.routeInfo, durationDelta, request.clientInfo);
     }
 
     // 4.2 Send an email

@@ -11,7 +11,7 @@ const { estimateDurationInTraffic, generateEmailText, generateSmsText, makeEmail
 });
 
 export type CheckDelayAndNotifyRequestDto = {
-  orderId?: string;
+  orderId: string;
   routeInfo: RouteInfoDto;
   promisedDurationSeconds: number;
   notificationThresholdSeconds: number;
@@ -74,7 +74,7 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
     // 3.1 Generate sms text
     let smsText;
     try {
-      smsText = await generateSmsText();
+      smsText = await generateSmsText(request.orderId, durationDelta, request.clientInfo);
     } catch (error) {
       response.errors.push((error as Error).message);
       smsText = await makeSmsTextFromTemplate();
@@ -97,7 +97,7 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
     // 4.1 Generate email text
     let emailText;
     try {
-      emailText = await generateEmailText();
+      emailText = await generateEmailText(request.orderId, request.routeInfo, durationDelta, request.clientInfo);
     } catch (error) {
       response.errors.push((error as Error).message);
       emailText = await makeEmailTextFromTemplate();

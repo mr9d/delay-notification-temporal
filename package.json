@@ -24,12 +24,14 @@
   },
   "dependencies": {
     "@googlemaps/routing": "^2.1.0",
+    "@sendgrid/mail": "^8.1.6",
     "@temporalio/activity": "^1.13.0",
     "@temporalio/client": "^1.13.0",
     "@temporalio/worker": "^1.13.0",
     "@temporalio/workflow": "^1.13.0",
     "dotenv": "^17.2.2",
-    "nanoid": "3.x"
+    "nanoid": "3.x",
+    "openai": "^5.23.1"
   },
   "devDependencies": {
     "@temporalio/testing": "^1.13.0",

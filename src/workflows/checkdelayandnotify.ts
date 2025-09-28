@@ -82,7 +82,7 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
 
     // 3.2 Send an sms
     try {
-      await sendSms(smsText);
+      await sendSms(request.clientInfo.phoneNumber, smsText);
       response.smsSent++;
     } catch (error) {
       response.errors.push((error as Error).message);

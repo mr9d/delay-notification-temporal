@@ -25,7 +25,7 @@ async function run() {
         firstName: 'Mike',
         secondName: 'Cold',
         email: 'mikecold@gmail.com',
-        phoneNumber: '+1234567890'
+        phoneNumber: '+15005550006'
       },
       clientNotificationSettings: { emailEnabled: true, smsEnabled: true }
     }],

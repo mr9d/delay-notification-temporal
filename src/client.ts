@@ -3,6 +3,32 @@ import 'dotenv/config';
 import { Connection, Client } from '@temporalio/client';
 import { checkDelayAndNotify } from './workflows/checkdelayandnotify';
 import { nanoid } from 'nanoid';
+import { ClientInfoDto } from './dto/clientinfo';
+import { RouteInfoDto } from './dto/routeinfo';
+import { NotificationSettingsDto } from './dto/settings';
+
+/**
+ * Mock data for testing the workflow
+ */
+const MOCK_CLIENT: ClientInfoDto = {
+  id: 'client01',
+  firstName: 'Mike',
+  secondName: 'Cold',
+  email: 'mikecold@gmail.com',
+  phoneNumber: '+15005550006',
+};
+
+const MOCK_ROUTE: RouteInfoDto = {
+  originAddress: '1 Main St, Springfield, IL',
+  destinationAddress: '456 Elm St, Shelbyville, IL'
+}
+
+const MOCK_NOTIFICATION_SETTINGS: NotificationSettingsDto = {
+  emailEnabled: true,
+  smsEnabled: true
+}
+
+const MOCK_THRESHOLD_SECONDS = 300;
 
 /**
  * Main entry point for the Temporal client. Connects to the Temporal server and starts the workflow.
@@ -29,17 +55,11 @@ async function run() {
     args: [
       {
         orderId: 'order01',
-        routeInfo: { originAddress: '1 Main St, Springfield, IL', destinationAddress: '456 Elm St, Shelbyville, IL' },
         promisedDurationSeconds: 1000,
-        notificationThresholdSeconds: 300,
-        clientInfo: {
-          id: 'client01',
-          firstName: 'Mike',
-          secondName: 'Cold',
-          email: 'mikecold@gmail.com',
-          phoneNumber: '+15005550006',
-        },
-        clientNotificationSettings: { emailEnabled: true, smsEnabled: true },
+        routeInfo: MOCK_ROUTE,
+        clientInfo: MOCK_CLIENT,
+        clientNotificationSettings: MOCK_NOTIFICATION_SETTINGS,
+        notificationThresholdSeconds: MOCK_THRESHOLD_SECONDS,
       },
     ],
     workflowId: 'workflow-' + nanoid(),

@@ -17,6 +17,9 @@ export async function generateEmailText(
   expectedDelaySeconds: number,
   clientInfo: ClientInfoDto,
 ): Promise<string> {
+  // Use company name from env or fallback
+  const companyName = process.env.DELIVERY_COMPANY_NAME || 'FastExpress';
+
   // Compose a prompt for the AI message generator, including all relevant delivery and customer details.
   // The prompt adapts based on whether the delivery is delayed or early.
   return await generateMessage(`Generate a friendly message for the customer about the ${expectedDelaySeconds < 0 ? 'delay' : 'earlier arrival'} of their delivery.
@@ -26,7 +29,7 @@ export async function generateEmailText(
   - Expected ${expectedDelaySeconds < 0 ? 'delay' : 'earlier arrival'} in minutes: ${Math.round(expectedDelaySeconds / 60)}
   - Origin address: ${routeInfo.originAddress}
   - Destination address: ${routeInfo.destinationAddress}
-  - Delivery company name: FastExpress
+  - Delivery company name: ${companyName}
 
   The message should be concise and reassuring, emphasizing our commitment to timely delivery and customer satisfaction.
   The message should be suitable for an email format.

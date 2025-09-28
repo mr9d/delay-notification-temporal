@@ -8,6 +8,9 @@ import { send } from '../services/sendgrid';
  * @returns True if the email was sent successfully, otherwise false
  */
 export async function sendEmail(email: string, text: string): Promise<boolean> {
+  // Log the email sending action
+  console.log(`Sending email to ${email} with text: ${text}`);
+
   // Use the send function from the SendGrid service to send the email.
   return await send(email, 'Delivery Update', text);
 }

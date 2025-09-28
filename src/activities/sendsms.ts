@@ -8,6 +8,12 @@ import { send } from '../services/twilio';
  * @returns True if the SMS was sent successfully, otherwise false
  */
 export async function sendSms(phoneNumber: string, text: string): Promise<boolean> {
+  // Log the SMS sending action
+  console.log(`Sending SMS to ${phoneNumber} with text: ${text}`);
+
+  // The sender number is configurable via environment variable.
+  const fromNumber = process.env.TWILIO_FROM_NUMBER || '+15005550006';
+  
   // Use the send function from the Twilio service to send the SMS.
-  return await send(phoneNumber, '+15005550006', text);
+  return await send(phoneNumber, fromNumber, text);
 }

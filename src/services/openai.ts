@@ -19,7 +19,7 @@ export async function generateMessage(prompt: string): Promise<string> {
 
   // Call the OpenAI API with the specified model and user prompt.
   const response = await openai.responses.create({
-    model: 'gpt-4o-mini',
+    model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
     input: [
       {
         role: 'user',

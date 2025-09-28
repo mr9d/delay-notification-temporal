@@ -1,6 +1,5 @@
 import sgMail from '@sendgrid/mail';
 
-
 // Set the SendGrid API key from environment variables for authentication.
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
@@ -22,11 +21,11 @@ export async function send(email: string, subject: string, text: string): Promis
   // Construct the email message object with all required fields.
   const msg = {
     to: email,
-    from: 'noreply@yourdomain.com',
+    from: process.env.SENDGRID_FROM_EMAIL || 'noreply@yourdomain.com',
     subject,
     text,
     mailSettings: {
-      sandboxMode: { enable: true }, // Debug mode - no actual email will be sent
+      sandboxMode: { enable: process.env.SENDGRID_SANDBOX_MODE === 'true' },
     },
   };
 

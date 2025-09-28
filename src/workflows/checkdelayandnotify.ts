@@ -61,7 +61,7 @@ export async function checkDelayAndNotify(request: CheckDelayAndNotifyRequestDto
   //
   // 2. Check if we need to notify the client
   //
-  if (Math.abs(durationDelta) > request.notificationThresholdSeconds) {
+  if (Math.abs(durationDelta) < request.notificationThresholdSeconds) {
     response.success = true;
     return response;
   }
